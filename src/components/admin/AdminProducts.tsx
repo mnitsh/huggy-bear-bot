@@ -62,7 +62,7 @@ export const AdminProducts = () => {
   const [isEditing, setIsEditing] = useState(false);
   
   const queryClient = useQueryClient();
-  const { categories } = useCategories();
+  const { data: categories } = useCategories();
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['admin-products'],

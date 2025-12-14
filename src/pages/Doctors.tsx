@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, Stethoscope } from 'lucide-react';
-import { Layout } from '@/components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { Input } from '@/components/ui/input';
 import { DoctorCard } from '@/components/doctors/DoctorCard';
 import { BookingDialog } from '@/components/doctors/BookingDialog';
@@ -15,7 +15,7 @@ const Doctors = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<{ id: string; name: string } | null>(null);
   const [bookingOpen, setBookingOpen] = useState(false);
   
-  const { doctors, isLoading } = useDoctors();
+  const { data: doctors, isLoading } = useDoctors();
   const { user } = useAuth();
   const navigate = useNavigate();
 

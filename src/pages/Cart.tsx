@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag, CreditCard, Banknote } from 'lucide-react';
-import { Layout } from '@/components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { useCart } from '@/hooks/useCart';
-import { useOrders } from '@/hooks/useOrders';
+import { useCart, useUpdateCartItem, useRemoveFromCart, useClearCart } from '@/hooks/useCart';
+import { useCreateOrder } from '@/hooks/useOrders';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -17,8 +17,11 @@ import { toast } from 'sonner';
 const Cart = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { cartItems, isLoading, updateQuantity, removeFromCart, clearCart } = useCart();
-  const { createOrder } = useOrders();
+  const { data: cartItems, isLoading } = useCart();
+  const updateQuantity = useUpdateCartItem();
+  const removeFromCart = useRemoveFromCart();
+  const clearCart = useClearCart();
+  const createOrder = useCreateOrder();
   
   const [shippingAddress, setShippingAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -73,7 +76,7 @@ const Cart = () => {
       items: orderItems,
       totalAmount: total,
       shippingAddress,
-      paymentMethod,
+      paymentMethod: paymentMethod as 'cod' | 'online',
       notes,
     }, {
       onSuccess: () => {

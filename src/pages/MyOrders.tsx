@@ -1,5 +1,5 @@
 import { Package, Clock, CheckCircle, Truck } from 'lucide-react';
-import { Layout } from '@/components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useOrders } from '@/hooks/useOrders';
@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const MyOrders = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { orders, isLoading } = useOrders();
+  const { data: orders, isLoading } = useOrders();
 
   if (!user) {
     navigate('/auth');

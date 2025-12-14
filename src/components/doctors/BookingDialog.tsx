@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { useConsultations } from '@/hooks/useConsultations';
+import { useCreateConsultation } from '@/hooks/useConsultations';
 import { toast } from 'sonner';
 
 interface BookingDialogProps {
@@ -42,7 +42,7 @@ export const BookingDialog = ({ open, onOpenChange, doctorId, doctorName }: Book
   const [petType, setPetType] = useState('');
   const [symptoms, setSymptoms] = useState('');
   
-  const { createConsultation } = useConsultations();
+  const createConsultation = useCreateConsultation();
 
   const timeSlots = [
     '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
