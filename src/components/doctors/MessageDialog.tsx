@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
-import { useConsultations } from '@/hooks/useConsultations';
+import { useConsultationMessages, useSendMessage } from '@/hooks/useConsultations';
 import { format } from 'date-fns';
 
 interface MessageDialogProps {
@@ -22,7 +22,8 @@ interface MessageDialogProps {
 export const MessageDialog = ({ open, onOpenChange, consultationId }: MessageDialogProps) => {
   const [message, setMessage] = useState('');
   const { user } = useAuth();
-  const { messages, sendMessage, isLoadingMessages } = useConsultations(consultationId);
+  const { data: messages, isLoading: isLoadingMessages } = useConsultationMessages(consultationId);
+  const sendMessage = useSendMessage();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

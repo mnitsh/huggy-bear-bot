@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Calendar, MessageCircle, Clock, CheckCircle } from 'lucide-react';
-import { Layout } from '@/components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const MyConsultations = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { consultations, isLoading } = useConsultations();
+  const { data: consultations, isLoading } = useConsultations();
   const [selectedConsultation, setSelectedConsultation] = useState<string | null>(null);
 
   if (!user) {

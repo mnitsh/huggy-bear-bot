@@ -58,11 +58,13 @@ export const useCreateConsultation = () => {
       petName,
       petType,
       symptoms,
+      scheduledAt,
     }: {
       doctorId: string;
       petName: string;
       petType: string;
       symptoms: string;
+      scheduledAt?: string;
     }) => {
       if (!user) throw new Error('Must be logged in');
 
@@ -74,6 +76,7 @@ export const useCreateConsultation = () => {
           pet_name: petName,
           pet_type: petType,
           symptoms,
+          scheduled_at: scheduledAt,
         })
         .select()
         .single();

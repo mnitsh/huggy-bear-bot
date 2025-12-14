@@ -4,8 +4,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { useCart } from '@/hooks/useCart';
-import { useProducts } from '@/hooks/useProducts';
+import { useAddToCart } from '@/hooks/useCart';
+import { useLikeProduct, useRateProduct } from '@/hooks/useProducts';
 import { toast } from 'sonner';
 
 interface ProductCardProps {
@@ -18,15 +18,16 @@ interface ProductCardProps {
     image_url: string | null;
     stock_quantity: number | null;
     avg_rating?: number;
-    total_likes?: number;
+    likes_count?: number;
     user_liked?: boolean;
   };
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { user } = useAuth();
-  const { addToCart } = useCart();
-  const { toggleLike, rateProduct } = useProducts();
+  const addToCart = useAddToCart();
+  const toggleLike = useLikeProduct();
+  const rateProduct = useRateProduct();
   const [selectedRating, setSelectedRating] = useState(0);
   const [showRating, setShowRating] = useState(false);
 
@@ -40,6 +41,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
     addToCart.mutate({ productId: product.id, quantity: 1 });
+    toast.success('Added to cart!');
   };
 
   const handleLike = () => {
@@ -47,7 +49,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       toast.error('Please login to like products');
       return;
     }
-    toggleLike.mutate(product.id);
+    toggleLike.mutate({ productId: product.id, liked: product.user_liked || false });
   };
 
   const handleRate = (rating: number) => {
@@ -56,6 +58,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
     rateProduct.mutate({ productId: product.id, rating });
+    toast.success('Rating saved!');
     setShowRating(false);
   };
 
@@ -103,11 +106,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               />
             ))}
           </div>
-          <span className="text-sm text-muted-foreground">
-            ({product.avg_rating?.toFixed(1) || '0'})
-          </span>
-          <span className="text-sm text-muted-foreground">
-            • {product.total_likes || 0} likes
+        <span className="text-sm text-muted-foreground">
+          ({product.avg_rating?.toFixed(1) || '0'})
+        </span>
+        <span className="text-sm text-muted-foreground">
+          • {product.likes_count || 0} likes
           </span>
         </div>
 
