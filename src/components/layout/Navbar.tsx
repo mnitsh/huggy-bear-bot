@@ -88,13 +88,13 @@ const Navbar: React.FC = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/orders" className="flex items-center gap-2">
+                      <Link to="/my-orders" className="flex items-center gap-2">
                         <Package className="h-4 w-4" />
                         My Orders
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/consultations" className="flex items-center gap-2">
+                      <Link to="/my-consultations" className="flex items-center gap-2">
                         <Heart className="h-4 w-4" />
                         My Consultations
                       </Link>
@@ -163,11 +163,11 @@ const Navbar: React.FC = () => {
                       <User className="h-5 w-5" />
                       My Profile
                     </Link>
-                    <Link to="/orders" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
+                    <Link to="/my-orders" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
                       <Package className="h-5 w-5" />
                       My Orders
                     </Link>
-                    <Link to="/consultations" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
+                    <Link to="/my-consultations" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
                       <Heart className="h-5 w-5" />
                       My Consultations
                     </Link>
