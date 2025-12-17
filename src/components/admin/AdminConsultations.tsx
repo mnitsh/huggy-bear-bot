@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -18,6 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { MessageDialog } from '@/components/doctors/MessageDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -26,6 +34,11 @@ import { toast } from 'sonner';
 
 export const AdminConsultations = () => {
   const [selectedConsultation, setSelectedConsultation] = useState<string | null>(null);
+  const [scheduleDialog, setScheduleDialog] = useState<{ open: boolean; consultation: any | null }>({
+    open: false,
+    consultation: null,
+  });
+  const [scheduleDate, setScheduleDate] = useState('');
   const queryClient = useQueryClient();
 
   const { data: consultations, isLoading } = useQuery({
@@ -57,6 +70,40 @@ export const AdminConsultations = () => {
     },
   });
 
+  const scheduleMutation = useMutation({
+    mutationFn: async ({ id, scheduled_at }: { id: string; scheduled_at: string }) => {
+      const { error } = await supabase
+        .from('consultations')
+        .update({ scheduled_at, status: 'confirmed' })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-consultations'] });
+      toast.success('Consultation scheduled!');
+      setScheduleDialog({ open: false, consultation: null });
+      setScheduleDate('');
+    },
+    onError: () => {
+      toast.error('Failed to schedule consultation');
+    },
+  });
+
+  const handleSchedule = (consultation: any) => {
+    setScheduleDialog({ open: true, consultation });
+    setScheduleDate(consultation.scheduled_at ? consultation.scheduled_at.slice(0, 16) : '');
+  };
+
+  const handleScheduleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (scheduleDialog.consultation && scheduleDate) {
+      scheduleMutation.mutate({
+        id: scheduleDialog.consultation.id,
+        scheduled_at: new Date(scheduleDate).toISOString(),
+      });
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -86,7 +133,6 @@ export const AdminConsultations = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Pet</TableHead>
-                  <TableHead>Doctor</TableHead>
                   <TableHead>Scheduled</TableHead>
                   <TableHead>Symptoms</TableHead>
                   <TableHead>Status</TableHead>
@@ -105,11 +151,10 @@ export const AdminConsultations = () => {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{consultation.doctors?.name || '-'}</TableCell>
                     <TableCell>
                       {consultation.scheduled_at
                         ? format(new Date(consultation.scheduled_at), 'PPp')
-                        : '-'}
+                        : <span className="text-muted-foreground">Not scheduled</span>}
                     </TableCell>
                     <TableCell className="max-w-xs truncate">
                       {consultation.symptoms || '-'}
@@ -138,13 +183,24 @@ export const AdminConsultations = () => {
                       </Select>
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setSelectedConsultation(consultation.id)}
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleSchedule(consultation)}
+                          title="Schedule"
+                        >
+                          <Calendar className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setSelectedConsultation(consultation.id)}
+                          title="Messages"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -153,6 +209,41 @@ export const AdminConsultations = () => {
           </div>
         )}
       </CardContent>
+
+      {/* Schedule Dialog */}
+      <Dialog open={scheduleDialog.open} onOpenChange={(open) => setScheduleDialog({ open, consultation: open ? scheduleDialog.consultation : null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule Consultation</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleScheduleSubmit} className="space-y-4">
+            {scheduleDialog.consultation && (
+              <div className="text-sm text-muted-foreground">
+                <p><strong>Pet:</strong> {scheduleDialog.consultation.pet_name} ({scheduleDialog.consultation.pet_type})</p>
+                <p><strong>Symptoms:</strong> {scheduleDialog.consultation.symptoms || 'Not specified'}</p>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="schedule-date">Date & Time</Label>
+              <Input
+                id="schedule-date"
+                type="datetime-local"
+                value={scheduleDate}
+                onChange={(e) => setScheduleDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setScheduleDialog({ open: false, consultation: null })}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={scheduleMutation.isPending}>
+                {scheduleMutation.isPending ? 'Scheduling...' : 'Schedule'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {selectedConsultation && (
         <MessageDialog
