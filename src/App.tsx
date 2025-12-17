@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
-import Doctors from "./pages/Doctors";
+import Consultation from "./pages/Consultation";
 import Cart from "./pages/Cart";
 import MyOrders from "./pages/MyOrders";
 import MyConsultations from "./pages/MyConsultations";
@@ -28,7 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/doctors" element={<Doctors />} />
+            <Route path="/consultation" element={<Consultation />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/my-consultations" element={<MyConsultations />} />
