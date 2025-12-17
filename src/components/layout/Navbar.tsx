@@ -25,9 +25,7 @@ const Navbar: React.FC = () => {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/products', label: 'Products' },
-    { href: '/doctors', label: 'Our Doctors' },
-    { href: '/about', label: 'About Us' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/consultation', label: 'Book Consultation' },
   ];
 
   const handleSignOut = async () => {
