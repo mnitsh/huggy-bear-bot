@@ -10,7 +10,7 @@ export interface Address {
   full_name: string;
   phone: string;
   address_line1: string;
-  address_line2?: string;
+  address_line2?: string | null;
   city: string;
   state: string;
   postal_code: string;
@@ -33,14 +33,14 @@ export const useAddresses = () => {
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .select('*')
         .eq('user_id', user.id)
         .order('is_default', { ascending: false })
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data as Address[];
+      return (data || []) as unknown as Address[];
     },
     enabled: !!user,
   });
@@ -52,13 +52,13 @@ export const useAddresses = () => {
       // If this is the first address or marked as default, unset other defaults
       if (address.is_default) {
         await supabase
-          .from('addresses')
+          .from('addresses' as any)
           .update({ is_default: false })
           .eq('user_id', user.id);
       }
 
       const { data, error } = await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .insert({ ...address, user_id: user.id })
         .select()
         .single();
@@ -82,14 +82,14 @@ export const useAddresses = () => {
       // If setting as default, unset other defaults
       if (updates.is_default) {
         await supabase
-          .from('addresses')
+          .from('addresses' as any)
           .update({ is_default: false })
           .eq('user_id', user.id)
           .neq('id', id);
       }
 
       const { data, error } = await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .update(updates)
         .eq('id', id)
         .eq('user_id', user.id)
@@ -113,7 +113,7 @@ export const useAddresses = () => {
       if (!user) throw new Error('Not authenticated');
       
       const { error } = await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .delete()
         .eq('id', id)
         .eq('user_id', user.id);
@@ -135,13 +135,13 @@ export const useAddresses = () => {
       
       // Unset all defaults first
       await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .update({ is_default: false })
         .eq('user_id', user.id);
       
       // Set the new default
       const { error } = await supabase
-        .from('addresses')
+        .from('addresses' as any)
         .update({ is_default: true })
         .eq('id', id)
         .eq('user_id', user.id);
