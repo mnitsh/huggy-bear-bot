@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import MyOrders from "./pages/MyOrders";
 import MyConsultations from "./pages/MyConsultations";
 import ChangePassword from "./pages/ChangePassword";
+import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/my-consultations" element={<MyConsultations />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
