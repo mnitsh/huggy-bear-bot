@@ -69,12 +69,16 @@ export const BookingDialog = ({ open, onOpenChange, doctorId, doctorName }: Book
       scheduledAt: scheduledAt.toISOString(),
     }, {
       onSuccess: () => {
+        toast.success('Consultation booked successfully!');
         onOpenChange(false);
         setPetName('');
         setPetType('');
         setSymptoms('');
         setDate(undefined);
         setTime('');
+      },
+      onError: (error) => {
+        toast.error('Failed to book consultation: ' + error.message);
       }
     });
   };

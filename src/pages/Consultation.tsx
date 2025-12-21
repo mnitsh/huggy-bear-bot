@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
-const DOCTOR_ID = 'single-doctor-id'; // This will be the single doctor's ID from database
+const DOCTOR_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 
 const Consultation = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
