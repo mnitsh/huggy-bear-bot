@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
 // Doctor's WhatsApp number in international format (no +, no spaces)
-const WHATSAPP_NUMBER = '919999999999';
+const WHATSAPP_NUMBER = '917985142561';
 const WHATSAPP_MESSAGE = 'Hi Dr. Rajesh, I would like to book a consultation for my pet.';
 
 const Consultation = () => {
