@@ -115,12 +115,6 @@ const Consultation = () => {
         </div>
       </div>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        doctorId={DOCTOR_ID}
-        doctorName="Dr. Rajesh Sharma"
-      />
     </Layout>
   );
 };
