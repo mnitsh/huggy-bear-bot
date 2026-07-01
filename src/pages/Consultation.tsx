@@ -80,9 +80,11 @@ const Consultation = () => {
                     <span className="text-2xl font-bold text-primary">₹500</span>
                     <span className="text-muted-foreground"> / session</span>
                   </div>
-                  <Button size="lg" onClick={handleBook} className="bg-[#25D366] hover:bg-[#20BA5A] text-white">
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Chat on WhatsApp
+                  <Button size="lg" asChild className="bg-[#25D366] hover:bg-[#20BA5A] text-white">
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={handleGuard}>
+                      <MessageCircle className="h-5 w-5 mr-2" />
+                      Chat on WhatsApp
+                    </a>
                   </Button>
                 </div>
               </CardContent>
