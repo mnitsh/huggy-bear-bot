@@ -8,21 +8,19 @@ import { useNavigate } from 'react-router-dom';
 
 // Doctor's WhatsApp number in international format (no +, no spaces)
 const WHATSAPP_NUMBER = '919999999999';
+const WHATSAPP_MESSAGE = 'Hi Dr. Rajesh, I would like to book a consultation for my pet.';
 
 const Consultation = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
-  const handleBook = () => {
+  const handleGuard = (e: React.MouseEvent) => {
     if (!user) {
+      e.preventDefault();
       toast.error('Please login to book a consultation');
       navigate('/auth');
-      return;
     }
-    const message = encodeURIComponent(
-      `Hi Dr. Rajesh, I would like to book a consultation for my pet.`
-    );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
   };
 
   return (
