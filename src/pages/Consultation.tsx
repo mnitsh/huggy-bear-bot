@@ -1,17 +1,15 @@
-import { useState } from 'react';
-import { Award, GraduationCap, Stethoscope, Clock, MessageCircle, Calendar } from 'lucide-react';
+import { Award, GraduationCap, Clock, MessageCircle } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookingDialog } from '@/components/doctors/BookingDialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
-const DOCTOR_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+// Doctor's WhatsApp number in international format (no +, no spaces)
+const WHATSAPP_NUMBER = '919999999999';
 
 const Consultation = () => {
-  const [bookingOpen, setBookingOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -21,7 +19,10 @@ const Consultation = () => {
       navigate('/auth');
       return;
     }
-    setBookingOpen(true);
+    const message = encodeURIComponent(
+      `Hi Dr. Rajesh, I would like to book a consultation for my pet.`
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
   };
 
   return (
@@ -81,9 +82,9 @@ const Consultation = () => {
                     <span className="text-2xl font-bold text-primary">₹500</span>
                     <span className="text-muted-foreground"> / session</span>
                   </div>
-                  <Button size="lg" onClick={handleBook}>
-                    <Calendar className="h-5 w-5 mr-2" />
-                    Book Consultation
+                  <Button size="lg" onClick={handleBook} className="bg-[#25D366] hover:bg-[#20BA5A] text-white">
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Chat on WhatsApp
                   </Button>
                 </div>
               </CardContent>
@@ -114,12 +115,6 @@ const Consultation = () => {
         </div>
       </div>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        doctorId={DOCTOR_ID}
-        doctorName="Dr. Rajesh Sharma"
-      />
     </Layout>
   );
 };
