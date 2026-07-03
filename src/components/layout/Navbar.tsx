@@ -155,10 +155,6 @@ const Navbar: React.FC = () => {
                       <Package className="h-5 w-5" />
                       My Orders
                     </Link>
-                    <Link to="/my-consultations" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
-                      <Heart className="h-5 w-5" />
-                      My Consultations
-                    </Link>
                     {isAdmin && (
                       <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-primary">
                         <Settings className="h-5 w-5" />
