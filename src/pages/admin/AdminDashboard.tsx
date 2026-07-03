@@ -16,11 +16,9 @@ const AdminDashboard = () => {
   const { data: stats } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      const [productsRes, ordersRes, consultationsRes, doctorsRes] = await Promise.all([
+      const [productsRes, ordersRes] = await Promise.all([
         supabase.from('products').select('id', { count: 'exact' }),
         supabase.from('orders').select('id, total_amount', { count: 'exact' }),
-        supabase.from('consultations').select('id', { count: 'exact' }),
-        supabase.from('doctors').select('id', { count: 'exact' }),
       ]);
 
       const totalRevenue = ordersRes.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
@@ -28,8 +26,6 @@ const AdminDashboard = () => {
       return {
         products: productsRes.count || 0,
         orders: ordersRes.count || 0,
-        consultations: consultationsRes.count || 0,
-        doctors: doctorsRes.count || 0,
         revenue: totalRevenue,
       };
     },
