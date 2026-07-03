@@ -93,18 +93,6 @@ const Navbar: React.FC = () => {
                         My Orders
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/my-consultations" className="flex items-center gap-2">
-                        <Heart className="h-4 w-4" />
-                        My Consultations
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/change-password" className="flex items-center gap-2">
-                        <Settings className="h-4 w-4" />
-                        Change Password
-                      </Link>
-                    </DropdownMenuItem>
                     {isAdmin && (
                       <>
                         <DropdownMenuSeparator />
