@@ -93,18 +93,6 @@ const Navbar: React.FC = () => {
                         My Orders
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/my-consultations" className="flex items-center gap-2">
-                        <Heart className="h-4 w-4" />
-                        My Consultations
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/change-password" className="flex items-center gap-2">
-                        <Settings className="h-4 w-4" />
-                        Change Password
-                      </Link>
-                    </DropdownMenuItem>
                     {isAdmin && (
                       <>
                         <DropdownMenuSeparator />
@@ -166,10 +154,6 @@ const Navbar: React.FC = () => {
                     <Link to="/my-orders" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
                       <Package className="h-5 w-5" />
                       My Orders
-                    </Link>
-                    <Link to="/my-consultations" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2">
-                      <Heart className="h-5 w-5" />
-                      My Consultations
                     </Link>
                     {isAdmin && (
                       <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-primary">

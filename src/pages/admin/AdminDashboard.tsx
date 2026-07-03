@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Package, Users, ShoppingCart, Calendar, TrendingUp, Stethoscope } from 'lucide-react';
+import { Package, ShoppingCart, TrendingUp } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,8 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AdminProducts } from '@/components/admin/AdminProducts';
 import { AdminOrders } from '@/components/admin/AdminOrders';
-import { AdminConsultations } from '@/components/admin/AdminConsultations';
-import { AdminDoctors } from '@/components/admin/AdminDoctors';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,11 +16,9 @@ const AdminDashboard = () => {
   const { data: stats } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      const [productsRes, ordersRes, consultationsRes, doctorsRes] = await Promise.all([
+      const [productsRes, ordersRes] = await Promise.all([
         supabase.from('products').select('id', { count: 'exact' }),
         supabase.from('orders').select('id, total_amount', { count: 'exact' }),
-        supabase.from('consultations').select('id', { count: 'exact' }),
-        supabase.from('doctors').select('id', { count: 'exact' }),
       ]);
 
       const totalRevenue = ordersRes.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
@@ -31,8 +26,6 @@ const AdminDashboard = () => {
       return {
         products: productsRes.count || 0,
         orders: ordersRes.count || 0,
-        consultations: consultationsRes.count || 0,
-        doctors: doctorsRes.count || 0,
         revenue: totalRevenue,
       };
     },
@@ -67,7 +60,7 @@ const AdminDashboard = () => {
         <h1 className="text-3xl font-bold text-foreground mb-8">Admin Dashboard</h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -93,28 +86,6 @@ const AdminDashboard = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Doctors
-              </CardTitle>
-              <Stethoscope className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats?.doctors || 0}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Consultations
-              </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats?.consultations || 0}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Revenue
               </CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -130,20 +101,12 @@ const AdminDashboard = () => {
           <TabsList>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="doctors">Doctors</TabsTrigger>
-            <TabsTrigger value="consultations">Consultations</TabsTrigger>
           </TabsList>
           <TabsContent value="products">
             <AdminProducts />
           </TabsContent>
           <TabsContent value="orders">
             <AdminOrders />
-          </TabsContent>
-          <TabsContent value="doctors">
-            <AdminDoctors />
-          </TabsContent>
-          <TabsContent value="consultations">
-            <AdminConsultations />
           </TabsContent>
         </Tabs>
       </div>
