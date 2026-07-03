@@ -130,20 +130,12 @@ const AdminDashboard = () => {
           <TabsList>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="doctors">Doctors</TabsTrigger>
-            <TabsTrigger value="consultations">Consultations</TabsTrigger>
           </TabsList>
           <TabsContent value="products">
             <AdminProducts />
           </TabsContent>
           <TabsContent value="orders">
             <AdminOrders />
-          </TabsContent>
-          <TabsContent value="doctors">
-            <AdminDoctors />
-          </TabsContent>
-          <TabsContent value="consultations">
-            <AdminConsultations />
           </TabsContent>
         </Tabs>
       </div>
