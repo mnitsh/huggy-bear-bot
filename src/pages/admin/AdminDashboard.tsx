@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Package, Users, ShoppingCart, Calendar, TrendingUp, Stethoscope } from 'lucide-react';
+import { Package, ShoppingCart, TrendingUp } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,8 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AdminProducts } from '@/components/admin/AdminProducts';
 import { AdminOrders } from '@/components/admin/AdminOrders';
-import { AdminConsultations } from '@/components/admin/AdminConsultations';
-import { AdminDoctors } from '@/components/admin/AdminDoctors';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
